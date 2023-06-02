@@ -1,0 +1,34 @@
+.products {
+  margin-bottom: 130px;
+}
+.side-bar {
+  margin: 75px 0 0 30px;
+}
+.options {
+  display: flex;
+}
+.button-option {
+  height: 30px;
+  width: 120px;
+  background-color: #edb932;
+  margin: 0 0 16px 0;
+}
+.product-products {
+  padding-top: 70px;
+}
+.name-product-home:hover .icon-add-cart {
+  opacity: 1;
+}
+
+.icon-add-cart {
+  opacity: 0;
+  position: absolute;
+  top: 25px;
+  right: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+  font-size: 25px;
+}
+.icon-add-cart:hover {
+  cursor: pointer;
+}

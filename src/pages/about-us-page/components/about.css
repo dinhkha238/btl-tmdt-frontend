@@ -1,0 +1,25 @@
+.about-us {
+  margin-bottom: 150px;
+}
+.statistics {
+  height: 600px;
+  background-image: url("https://websitedemos.net/home-decor-04/wp-content/uploads/sites/644/2020/08/about-furniture-store-img.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  margin-top: 120px;
+}
+.data-about {
+  background-color: white;
+  height: 30%;
+  width: 80%;
+  bottom: 0;
+  position: absolute;
+  padding-top: 40px;
+}
+.select-about {
+  font-weight: 500;
+  padding-top: 10px;
+}

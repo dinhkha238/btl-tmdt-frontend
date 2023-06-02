@@ -1,0 +1,31 @@
+.header {
+  margin: 20px 20px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+}
+.header-row {
+  background-color: #757779;
+  height: 65px;
+  /* width: 100%; */
+}
+.padding-p {
+  padding: 5px 0 0 0;
+}
+.col-footer {
+  padding: 50px 0;
+}
+.col-footer-2 {
+  padding: 40px 0;
+}
+.infor-footer {
+  background-color: #1a1a1a;
+  color: #fff;
+  border-bottom: 1px solid #686060;
+}
+.product-cart {
+  border-bottom: 1px solid #ccc;
+}
+#root {
+  width: 100%;
+}
