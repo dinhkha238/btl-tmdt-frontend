@@ -4,7 +4,7 @@ import { useMutationLogin } from "@/pages/app.loader";
 export const Login = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { mutate, isLoading } = useMutationLogin();
+  const { mutate } = useMutationLogin();
   const onFinish = (values: any) => {
     mutate(values);
   };

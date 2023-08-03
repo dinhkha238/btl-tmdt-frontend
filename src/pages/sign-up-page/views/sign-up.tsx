@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export const SignUp: React.FC = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { mutate, isLoading } = useMutationRegister();
+  const { mutate } = useMutationRegister();
   const onFinish = (values: any) => {
     mutate(values);
   };

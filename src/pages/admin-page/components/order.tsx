@@ -64,7 +64,7 @@ export const Order = () => {
     },
   ];
 
-  const onChange: DatePickerProps["onChange"] = (date, dateString) => {
+  const onChange: DatePickerProps["onChange"] = (_, dateString) => {
     setIsTime(dateString);
   };
   return (
