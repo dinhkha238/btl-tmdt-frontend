@@ -7,15 +7,15 @@ export const AppLayout: React.FC = () => {
   const a = localStorage.getItem("token");
   return (
     <>
-      {a == "true" ? (
-        <>
-          <AppHeader />
-          <Outlet />
-          <AppFooter />
-        </>
-      ) : (
-        <Navigate to="/login" />
-      )}
+      {/* {a == "true" ? ( */}
+      {/* <> */}
+      <AppHeader />
+      <Outlet />
+      <AppFooter />
+      {/* </> */}
+      {/* ) : ( */}
+      {/* <Navigate to="/login" /> */}
+      {/* )} */}
     </>
   );
 };
