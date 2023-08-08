@@ -11,4 +11,7 @@ export default defineConfig({
     ],
   },
   plugins: [react()],
+  build: {
+    outDir: 'dist', // Đây là đường dẫn đến thư mục build
+  },
 })
