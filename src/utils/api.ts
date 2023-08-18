@@ -1,7 +1,8 @@
+import { BASE_URL } from "@/constants/config";
 import axios from "axios";
 
 export const apiClient =  axios.create({
-  baseURL: "http://localhost:8000/",
+  baseURL: BASE_URL,
   timeout: 2000,
 });
 apiClient.interceptors.request.use(
