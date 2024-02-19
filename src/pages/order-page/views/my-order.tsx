@@ -40,14 +40,14 @@ export const MyOrder = () => {
             {cart?.map((item: any, index: any) => {
               return (
                 <div>
-                  <Row justify={"space-between"}>
-                    <Col span={19}>
+                  <Row>
+                    <Col span={14}>
                       <b>
                         {index + 1}. {item.color}{" "}
                       </b>
                     </Col>
                     <Col span={5}>
-                      VND{item.price} x {item.count}
+                      {item.price} x {item.count}
                     </Col>
                   </Row>
                 </div>
@@ -61,7 +61,7 @@ export const MyOrder = () => {
       title: "Tổng tiền",
       dataIndex: "total",
       render: (total: any) => {
-        return <div>VND{total}</div>;
+        return <div>{total}</div>;
       },
     },
     {
