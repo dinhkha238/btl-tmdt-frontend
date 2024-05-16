@@ -24,7 +24,7 @@ export const Login = () => {
           </div>
         </Row>
         <Form.Item
-          name="user"
+          name="username"
           rules={[{ required: true, message: "Please input username !" }]}
         >
           <Input style={{ height: 40 }} placeholder="Username" />

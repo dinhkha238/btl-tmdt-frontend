@@ -68,9 +68,14 @@ export const TrangChu = () => {
         <Row justify="center">
           {dataProducts?.slice(0, 4).map((item: any) => {
             return (
-              <Col span={4.5} className="name-product-home">
+              <Col span={5} className="name-product-home">
                 <Row justify={"center"}>
-                  <Image preview={false} src={item.urlImg} />
+                  <Image
+                    preview={false}
+                    src={item.url}
+                    width={200}
+                    style={{ height: 200 }}
+                  />
                   <Popover content={content} placement="left">
                     <ShoppingCartOutlined
                       className="icon-add-cart"
@@ -88,7 +93,7 @@ export const TrangChu = () => {
               </Col>
             );
             function handleAddToCart() {
-              addToCart(item._id);
+              addToCart(item.id);
             }
           })}
         </Row>
@@ -162,7 +167,12 @@ export const TrangChu = () => {
             return (
               <Col span={4} className="name-product-home">
                 <Row justify={"center"}>
-                  <Image preview={false} src={item.urlImg} />
+                  <Image
+                    preview={false}
+                    src={item.url}
+                    width={200}
+                    style={{ height: 200 }}
+                  />
                   <Popover content={content} placement="left">
                     <ShoppingCartOutlined
                       className="icon-add-cart"
@@ -180,7 +190,7 @@ export const TrangChu = () => {
               </Col>
             );
             function handleAddToCart() {
-              addToCart(item._id);
+              addToCart(item.id);
             }
           })}
         </Row>
@@ -189,7 +199,12 @@ export const TrangChu = () => {
             return (
               <Col span={4} className="name-product-home">
                 <Row justify={"center"}>
-                  <Image preview={false} src={item.urlImg} />
+                  <Image
+                    preview={false}
+                    src={item.url}
+                    width={200}
+                    style={{ height: 200 }}
+                  />
                   <Popover content={content} placement="left">
                     <ShoppingCartOutlined
                       className="icon-add-cart"
@@ -207,7 +222,7 @@ export const TrangChu = () => {
               </Col>
             );
             function handleAddToCart() {
-              addToCart(item._id);
+              addToCart(item.id);
             }
           })}
         </Row>

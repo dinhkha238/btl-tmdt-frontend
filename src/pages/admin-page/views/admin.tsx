@@ -5,6 +5,7 @@ import { Product } from "../components/product";
 import { User } from "../components/user";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Order } from "../components/order";
+import { Cart } from "../components/cart";
 
 export const Admin = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export const Admin = () => {
                 >
                   <Menu.Item key="products">Sản phẩm</Menu.Item>
                   <Menu.Item key="users">Người dùng</Menu.Item>
+                  <Menu.Item key="carts">Giỏ hàng</Menu.Item>
                   <Menu.Item key="orders">Đơn hàng</Menu.Item>
                   <Menu.Item onClick={handleLogout}>Đăng xuất</Menu.Item>
                 </Menu>
@@ -37,6 +39,7 @@ export const Admin = () => {
           <Col span={20}>
             {selectedMenu === "products" && <Product />}
             {selectedMenu === "users" && <User />}
+            {selectedMenu === "carts" && <Cart />}
             {selectedMenu === "orders" && <Order />}
           </Col>
         </Row>

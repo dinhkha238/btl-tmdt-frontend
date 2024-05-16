@@ -30,7 +30,7 @@ export const SignUp: React.FC = () => {
           <Input style={{ height: 40 }} placeholder="Fullname" />
         </Form.Item>
         <Form.Item
-          name="user"
+          name="username"
           rules={[{ required: true, message: "Please input username !" }]}
         >
           <Input style={{ height: 40 }} placeholder="Username" />

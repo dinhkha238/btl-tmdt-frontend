@@ -2,27 +2,58 @@ import { apiClient, filterEmptyString } from "@/utils/api";
 
 //get
 export const getCustomers = async () => {
-    const result = await apiClient.get("/");
+    const result = await apiClient.get("/get-all-user");
     return result.data;
 }
 export const getProducts = async (select:any) => {
-    const result = await apiClient.get(`/get-products/${select.option}`,{
+    const result = await apiClient.get(`/get-product-items`,{
         params: filterEmptyString(select),
     });
     return result.data;
 }
+
 export const getCustomer = async () => {
     const result = await apiClient.get("/get-customer");
     return result.data;
 }
 export const getOrders = async (time:any) => {
-    const result = await apiClient.get("/get-orders",{
+    const result = await apiClient.get("/get-all-orders",{
         params: filterEmptyString(time),
     });
     return result.data;
 }
-export const getOrdersById = async () => {
-    const result = await apiClient.get("/get-orders-by-id");
+export const getOrderById = async (data:any) => {
+    const result = await apiClient.get(`/get-order-by-id/${data.id}`);
+    return result.data;
+}
+export const getCarts = async (time:any) => {
+    const result = await apiClient.get("/get-all-carts",{
+        params: filterEmptyString(time),
+    });
+    return result.data;
+}
+export const getCartById = async (data:any) => {
+    const result = await apiClient.get(`/get-cart-by-id/${data.id}`);
+    return result.data;
+}
+export const getMyOrder = async () => {
+    const result = await apiClient.get("/get-my-order");
+    return result.data;
+}
+export const getMyCarts = async () => {
+    const result = await apiClient.get("/get-my-cart");
+    return result.data;
+}
+export const getAllShipments = async () => {
+    const result = await apiClient.get("/get-all-shipments");
+    return result.data;
+}
+export const getAllVouchers = async () => {
+    const result = await apiClient.get("/get-all-vouchers");
+    return result.data;
+}
+export const getAllPayments = async () => {
+    const result = await apiClient.get("/get-all-payments");
     return result.data;
 }
 
@@ -47,11 +78,11 @@ export const createOrder = async (data:any) => {
 
 // put
 export const addToCart = async (id:any) => {
-    const result = await apiClient.put(`/add-to-cart/${id}`,id);
+    const result = await apiClient.put(`/add-item-to-cart/${id}`,id);
     return result.data;
 }
 export const decreaseProduct = async (id:any) => {
-    const result = await apiClient.put(`/decrease-product/${id}`,id);
+    const result = await apiClient.put(`/reduce-item-to-cart/${id}`,id);
     return result.data;
 }
 export const updateProduct = async (data:any) => {
@@ -66,7 +97,7 @@ export const updateCustomer = async (data:any) => {
 
 // delete
 export const deleteToCart = async (id:any) => {
-    const result = await apiClient.delete(`/delete-cart/${id}`);
+    const result = await apiClient.delete(`/remove-item-from-cart/${id}`);
     return result.data;
 }
 export const deleteAllCart = async () => {

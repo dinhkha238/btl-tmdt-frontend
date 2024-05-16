@@ -1,4 +1,4 @@
-import { addCustomer, addProduct, addToCart, checkLogin, createOrder, decreaseProduct, deleteAllCart, deleteCustomer, deleteOrder, deleteProduct, deleteToCart, getCustomer, getCustomers, getOrders, getOrdersById, getProducts, updateCustomer, updateProduct } from "@/services/app.service";
+import { addCustomer, addProduct, addToCart, checkLogin, createOrder, decreaseProduct, deleteAllCart, deleteCustomer, deleteOrder, deleteProduct, deleteToCart, getCustomer, getCustomers, getOrders, getOrderById, getProducts, updateCustomer, updateProduct, getCarts, getCartById, getMyOrder, getMyCarts, getAllPayments, getAllShipments, getAllVouchers } from "@/services/app.service";
 import { message } from "antd";
 import { useMutation, useQuery, useQueryClient } from "react-query"
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,14 @@ export const CACHE_KEYS = {
   InforCustomer: "INFOR_CUSTOMER",
   InforCustomers: "INFOR_CUSTOMERS",
   InforOrders: "INFOR_ORDERS",
+  InforOrder: "INFOR_ORDER",
+  InforCarts: "INFOR_CARTS",
+  InforCart: "INFOR_CART",
+  InforMyOrders: "INFOR_MY_ORDERS",
+  InforMyCarts: "INFOR_MY_CARTS",
+  InforShipments: "INFOR_SHIPMENTS",
+  InforVouchers: "INFOR_VOUCHERS",
+  InforPayments: "INFOR_PAYMENTS",
 }
 
 export const useMutationLogin =  () => {
@@ -106,7 +114,7 @@ export const useAddToCart = () => {
   },
   {
     onSuccess:() => {
-      queryClient.invalidateQueries(CACHE_KEYS.InforCustomer);
+      queryClient.invalidateQueries(CACHE_KEYS.InforMyCarts);
       message.success("Add to cart success")
     },
     onError:() => {
@@ -123,7 +131,7 @@ export const useDecreaseToCart = () => {
   },
   {
     onSuccess:() => {
-      queryClient.invalidateQueries(CACHE_KEYS.InforCustomer);
+      queryClient.invalidateQueries(CACHE_KEYS.InforMyCarts);
       message.success("Decrease to cart success")
     },
 
@@ -142,7 +150,7 @@ export const useDeleteToCart = () => {
   },
   {
     onSuccess:() => {
-      queryClient.invalidateQueries(CACHE_KEYS.InforCustomer);
+      queryClient.invalidateQueries(CACHE_KEYS.InforMyCarts);
       message.success("Delete to cart success")
     },
     onError:() => {
@@ -158,7 +166,7 @@ export const useDeleteAllToCart = () => {
   },
   {
     onSuccess:() => {
-      queryClient.invalidateQueries(CACHE_KEYS.InforCustomer);
+      queryClient.invalidateQueries(CACHE_KEYS.InforMyCarts);
     },
     onError:() => {
     }
@@ -215,11 +223,13 @@ export const useDeleteProduct = () => {
   )
 }
 export const useCreateOrder = () => {
+  const queryClient = useQueryClient();
   return useMutation((data: any) => {
     return createOrder(data)
   },
   {
     onSuccess:() => {
+      queryClient.invalidateQueries(CACHE_KEYS.InforMyCarts);
       message.success("Đặt hàng thành công")
     },
     onError:() => {
@@ -250,18 +260,37 @@ export const useDeleteOrder = () => {
 export const useProducts =  (select:any) => {
   return useQuery([CACHE_KEYS.InforProducts,select], () => getProducts(select));
 }
-
 export const useCustomer =  () => {
   return useQuery(CACHE_KEYS.InforCustomer, () => getCustomer());
 }
-
 export const useCustomers =  () => {
   return useQuery(CACHE_KEYS.InforCustomers, () => getCustomers());
 }
 export const useOrders =  (time:any) => {
   return useQuery([CACHE_KEYS.InforOrders,time], () => getOrders(time));
 }
-export const useOrdersById =  () => {
-  return useQuery(CACHE_KEYS.InforOrders, () => getOrdersById());
+export const useOrderById =  (data:any) => {
+  return useQuery([CACHE_KEYS.InforOrder,data], () => getOrderById(data));
+}
+export const useCarts =  (time:any) => {
+  return useQuery([CACHE_KEYS.InforCarts,time], () => getCarts(time));
+}
+export const useCartById =  (data:any) => {
+  return useQuery([CACHE_KEYS.InforCart,data], () => getCartById(data));
+}
+export const useMyOrders =  () => {
+  return useQuery([CACHE_KEYS.InforMyOrders], () => getMyOrder());
+}
+export const useMyCarts =  () => {
+  return useQuery([CACHE_KEYS.InforMyCarts], () => getMyCarts());
+}
+export const useAllShipments =  () => {
+  return useQuery([CACHE_KEYS.InforShipments], () => getAllShipments());
+}
+export const useAllVouchers =  () => {
+  return useQuery([CACHE_KEYS.InforVouchers], () => getAllVouchers());
+}
+export const useAllPayments =  () => {
+  return useQuery([CACHE_KEYS.InforPayments], () => getAllPayments());
 }
 

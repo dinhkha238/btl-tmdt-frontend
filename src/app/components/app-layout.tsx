@@ -6,7 +6,7 @@ export const AppLayout: React.FC = () => {
   const isAuthenticated = localStorage.getItem("token");
   return (
     <>
-      {isAuthenticated == "true" ? (
+      {isAuthenticated ? (
         <>
           <AppHeader />
           <Outlet />

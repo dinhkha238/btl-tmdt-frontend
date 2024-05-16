@@ -124,7 +124,12 @@ export const ListSanPham = () => {
                     return (
                       <Col span={8} offset={0} className="name-product-home">
                         <Row justify={"center"}>
-                          <Image preview={false} src={item.urlImg} />
+                          <Image
+                            preview={false}
+                            src={item.url}
+                            width={200}
+                            style={{ height: 200 }}
+                          />
                           <Popover content={content} placement="left">
                             <ShoppingCartOutlined
                               className="icon-add-cart"
@@ -135,14 +140,14 @@ export const ListSanPham = () => {
                         <div className="infor-product">
                           <Row justify="center">{item.name}</Row>
                           <Row justify="center" className="color-borrow font">
-                            {item.color}
+                            {item.summary}
                           </Row>
                           <Row justify="center">${item.price}</Row>
                         </div>
                       </Col>
                     );
                     function handleAddToCart() {
-                      addToCart(item._id);
+                      addToCart(item.id);
                     }
                   })
                 ) : (

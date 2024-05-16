@@ -17,9 +17,10 @@ import {
   Table,
 } from "antd";
 import { useState } from "react";
+import { useProductItems } from "../product.loader";
 
 export const Product = () => {
-  const { data: dataProducts } = useProducts({
+  const { data: dataProducts } = useProductItems({
     option: "All",
   });
   const { mutate: mutateAddProduct } = useAddProduct();
@@ -39,18 +40,48 @@ export const Product = () => {
   };
   const columns = [
     {
+      title: "Product ID",
+      dataIndex: "productId",
+      width: 300,
+    },
+    {
       title: "Name",
       dataIndex: "name",
       width: 300,
     },
     {
-      title: "Description",
-      dataIndex: "color",
-      width: 500,
+      title: "Summary",
+      dataIndex: "summary",
+      width: 300,
+    },
+    {
+      title: "Release Date",
+      dataIndex: "releaseDate",
+      width: 300,
+    },
+    {
+      title: "provider",
+      dataIndex: "provider",
+      width: 300,
+    },
+    {
+      title: "Brand",
+      dataIndex: "brand",
+      width: 300,
     },
     {
       title: "Price",
       dataIndex: "price",
+      width: 500,
+    },
+    {
+      title: "Added Date",
+      dataIndex: "addedDate",
+      width: 300,
+    },
+    {
+      title: "Inventory",
+      dataIndex: "inStock",
       width: 300,
     },
     {

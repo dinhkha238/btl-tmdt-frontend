@@ -77,7 +77,12 @@ export const Room = () => {
               return (
                 <Col span={6} className="name-product-home">
                   <Row justify={"center"}>
-                    <Image preview={false} src={item.urlImg} />
+                    <Image
+                      preview={false}
+                      src={item.url}
+                      width={200}
+                      style={{ height: 200 }}
+                    />
                     <Popover content={content} placement="left">
                       <ShoppingCartOutlined
                         className="icon-add-cart"
@@ -95,7 +100,7 @@ export const Room = () => {
                 </Col>
               );
               function handleAddToCart() {
-                addToCart(item._id);
+                addToCart(item.id);
               }
             })}
           </Row>
@@ -149,7 +154,12 @@ export const Room = () => {
               return (
                 <Col span={6} className="name-product-home">
                   <Row justify={"center"}>
-                    <Image preview={false} src={item.urlImg} />
+                    <Image
+                      preview={false}
+                      src={item.url}
+                      width={200}
+                      style={{ height: 200 }}
+                    />
                     <Popover content={content} placement="left">
                       <ShoppingCartOutlined
                         className="icon-add-cart"
@@ -167,7 +177,7 @@ export const Room = () => {
                 </Col>
               );
               function handleAddToCart() {
-                addToCart(item._id);
+                addToCart(item.id);
               }
             })}
           </Row>
@@ -221,7 +231,12 @@ export const Room = () => {
               return (
                 <Col span={6} className="name-product-home">
                   <Row justify={"center"}>
-                    <Image preview={false} src={item.urlImg} />
+                    <Image
+                      preview={false}
+                      src={item.url}
+                      width={200}
+                      style={{ height: 200 }}
+                    />
                     <Popover content={content} placement="left">
                       <ShoppingCartOutlined
                         className="icon-add-cart"
@@ -239,7 +254,7 @@ export const Room = () => {
                 </Col>
               );
               function handleAddToCart() {
-                addToCart(item._id);
+                addToCart(item.id);
               }
             })}
           </Row>
@@ -293,7 +308,12 @@ export const Room = () => {
               return (
                 <Col span={6} className="name-product-home">
                   <Row justify={"center"}>
-                    <Image preview={false} src={item.urlImg} />
+                    <Image
+                      preview={false}
+                      src={item.url}
+                      width={200}
+                      style={{ height: 200 }}
+                    />
                     <Popover content={content} placement="left">
                       <ShoppingCartOutlined
                         className="icon-add-cart"
@@ -311,7 +331,7 @@ export const Room = () => {
                 </Col>
               );
               function handleAddToCart() {
-                addToCart(item._id);
+                addToCart(item.id);
               }
             })}
           </Row>

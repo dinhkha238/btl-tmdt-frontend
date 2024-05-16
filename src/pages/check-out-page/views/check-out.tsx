@@ -1,22 +1,54 @@
 import {
+  useAllPayments,
+  useAllShipments,
+  useAllVouchers,
   useCreateOrder,
-  useCustomer,
   useDeleteAllToCart,
 } from "@/pages/app.loader";
-import { Button, Col, Input, Row, Image } from "antd";
+import { Button, Col, Input, Row, Image, Select } from "antd";
 import "../components/check-out.css";
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+interface Shipping {
+  id: string;
+  name: string;
+  address: string;
+  fees: number;
+}
+interface Voucher {
+  id: string;
+  name: string;
+  value: number;
+}
+
 export const CheckOut = () => {
   const navigate = useNavigate();
-  const { data: dataUser, isLoading } = useCustomer();
+  const { data: dataShipments } = useAllShipments();
+  const { data: dataVouchers } = useAllVouchers();
+  const { data: dataPayments } = useAllPayments();
   const { mutate: deleteAllCart } = useDeleteAllToCart();
   const [inputAddress, setInputAddress] = useState("");
   const [inputPhone, setInputPhone] = useState("");
   const [inputNote, setInputNote] = useState("");
   const { mutate: createOrder } = useCreateOrder();
+  const [feeShip, setFeeShip] = useState<Shipping>({
+    fees: 0,
+    id: "",
+    name: "",
+    address: "",
+  });
+  const [voucher, setVoucher] = useState<Voucher>({
+    id: "",
+    name: "",
+    value: 0,
+  });
+  const [typePayment, setTypePayment] = useState();
+  const dataMyCart = JSON.parse(localStorage.getItem("dataMyCart") || "{}");
+  const totalMyCart = dataMyCart
+    ?.map((item: any) => item.price * item.quantity)
+    .reduce((a: any, b: any) => a + b, 0);
   const handleInputAddress = (event: any) => {
     setInputAddress(event.target.value);
   };
@@ -25,6 +57,19 @@ export const CheckOut = () => {
   };
   const handleInputNote = (event: any) => {
     setInputNote(event.target.value);
+  };
+  const handleChangeShip = (value: string) => {
+    const foundElement = dataShipments?.find((item: any) => item.id === value);
+    setFeeShip(foundElement);
+    console.log(foundElement);
+  };
+  const handleChangeVoucher = (value: string) => {
+    const foundElement = dataVouchers?.find((item: any) => item.id === value);
+    console.log(foundElement);
+    setVoucher(foundElement);
+  };
+  const handleChangeTypePayment = (value: any) => {
+    setTypePayment(value);
   };
 
   return (
@@ -71,37 +116,153 @@ export const CheckOut = () => {
                 <h3>Subtotal</h3>
               </Col>
             </Row>
-            {!isLoading &&
-              dataUser?.cart?.data?.map((item: any) => {
-                return (
-                  <Row className=" border">
-                    <Col span={4}>
-                      <Image src={item.urlImg} preview={false} />
-                    </Col>
-                    <Col span={16} style={{ paddingTop: 60, paddingLeft: 10 }}>
-                      <Row>
-                        <h3>
-                          {item.color} x {item.count}
-                        </h3>
-                      </Row>
-                    </Col>
-                    <Col span={4} style={{ paddingTop: 40 }} pull={1}>
-                      <Row justify={"end"} style={{ paddingTop: 10 }}>
-                        <h3 style={{ color: "#edb932" }}>
-                          ${item.price * item.count}
-                        </h3>{" "}
-                      </Row>
-                    </Col>
-                  </Row>
-                );
-              })}
+            {dataMyCart?.map((item: any) => {
+              return (
+                <Row className=" border">
+                  <Col span={4}>
+                    <Image
+                      src={item?.url}
+                      preview={false}
+                      width={100}
+                      style={{ height: 100, margin: "10px 0 0 20px" }}
+                    />
+                  </Col>
+                  <Col span={16} style={{ paddingTop: 60, paddingLeft: 10 }}>
+                    <Row>
+                      <h3>
+                        {item.name} x {item.quantity}
+                      </h3>
+                    </Row>
+                  </Col>
+                  <Col span={4} style={{ paddingTop: 40 }} pull={1}>
+                    <Row justify={"end"} style={{ paddingTop: 10 }}>
+                      <h3 style={{ color: "#edb932" }}>
+                        ${item.price * item.quantity}
+                      </h3>{" "}
+                    </Row>
+                  </Col>
+                </Row>
+              );
+            })}
             <Row justify={"space-between"} className="border">
               <Col push={1}>
                 <h3>Total</h3>
               </Col>
               <Col pull={1}>
-                <h3>${dataUser?.cart?.total}</h3>
+                <h3>
+                  $
+                  {dataMyCart
+                    ?.map((item: any) => item.price * item.quantity)
+                    .reduce((a: any, b: any) => a + b, 0)
+                    .toFixed(2)}
+                </h3>
               </Col>
+            </Row>
+          </Col>
+        </Row>
+        <Row>
+          <Col push={3}>
+            <h2>Payment methods</h2>
+          </Col>
+        </Row>
+        <Row justify={"space-between"}>
+          <Col span={8} push={3}>
+            Shipping unit
+          </Col>
+          <Col span={5} pull={3}>
+            <Row justify={"end"}>
+              <Select
+                placeholder="Select a shipping unit"
+                style={{ width: 250, marginBottom: 10 }}
+                onChange={handleChangeShip}
+                options={dataShipments?.map((item: any) => {
+                  return {
+                    value: item.id,
+                    label: item.name + " - " + item.address,
+                  };
+                })}
+              />
+            </Row>
+          </Col>
+        </Row>
+        <Row justify={"space-between"}>
+          <Col span={8} push={3}>
+            Voucher
+          </Col>
+          <Col span={5} pull={3}>
+            <Row justify={"end"}>
+              <Select
+                placeholder="Select a voucher"
+                style={{ width: 250, marginBottom: 10 }}
+                onChange={handleChangeVoucher}
+                options={dataVouchers?.map((item: any) => {
+                  return {
+                    value: item.id,
+                    label: item.name,
+                  };
+                })}
+              />
+            </Row>
+          </Col>
+        </Row>
+        <Row justify={"space-between"}>
+          <Col span={8} push={3}>
+            Payment type
+          </Col>
+          <Col span={5} pull={3}>
+            <Row justify={"end"}>
+              <Select
+                placeholder="Select a payment type"
+                style={{ width: 250 }}
+                onChange={handleChangeTypePayment}
+                options={dataPayments?.map((item: any) => {
+                  return {
+                    value: item.id,
+                    label: item.name,
+                  };
+                })}
+              />
+            </Row>
+          </Col>
+        </Row>
+        <Row>
+          <Col push={3}>
+            <h2>Payment details</h2>
+          </Col>
+        </Row>
+        <Row justify={"space-between"}>
+          <Col span={1} push={3}>
+            Total bill
+          </Col>
+          <Col span={5} pull={3}>
+            <Row justify={"end"}>${totalMyCart.toFixed(2)}</Row>
+          </Col>
+        </Row>
+        <Row justify={"space-between"}>
+          <Col span={8} push={3}>
+            Total shipping fee
+          </Col>
+          <Col span={5} pull={3}>
+            <Row justify={"end"}>${feeShip?.fees.toFixed(2)}</Row>
+          </Col>
+        </Row>
+        <Row justify={"space-between"}>
+          <Col span={8} push={3}>
+            Discount on voucher
+          </Col>
+          <Col span={5} pull={3}>
+            <Row justify={"end"}>-${voucher?.value.toFixed(2)}</Row>
+          </Col>
+        </Row>
+        <Row justify={"space-between"}>
+          <Col span={8} push={3}>
+            <h3>Total payment</h3>
+          </Col>
+          <Col span={5} pull={3}>
+            <Row justify={"end"}>
+              <h2>
+                ${(feeShip?.fees - voucher?.value + totalMyCart).toFixed(2)}
+              </h2>
             </Row>
           </Col>
         </Row>
@@ -140,15 +301,10 @@ export const CheckOut = () => {
   }
   function info() {
     const order = {
-      time: formatDate(new Date()),
-      id_user: dataUser?.id,
-      user: dataUser?.user,
-      name: dataUser?.fullname,
-      address: inputAddress,
-      phone: inputPhone,
-      products: dataUser?.cart?.data,
-      total: dataUser?.cart?.total,
-      note: inputNote,
+      paymentId: typePayment,
+      shipmentId: feeShip?.id,
+      voucherId: voucher?.id,
+      createdAt: formatDate(new Date()),
     };
     createOrder(order);
     deleteAllCart();

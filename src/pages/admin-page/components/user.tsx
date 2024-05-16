@@ -38,8 +38,8 @@ export const User = () => {
       width: 300,
     },
     {
-      title: "User",
-      dataIndex: "user",
+      title: "Username",
+      dataIndex: "username",
       width: 300,
     },
     {
@@ -48,31 +48,24 @@ export const User = () => {
       width: 300,
     },
     {
-      title: "Cart",
-      dataIndex: "cart",
-      width: 600,
-      render: (cart: any) => {
-        return (
-          <div>
-            {cart?.data?.map((item: any, index: any) => {
-              return (
-                <div>
-                  <Row>
-                    <Col span={14}>
-                      <b>
-                        {index + 1}. {item.color}{" "}
-                      </b>
-                    </Col>
-                    <Col span={10}>
-                      ${item.price} x {item.count}
-                    </Col>
-                  </Row>
-                </div>
-              );
-            })}
-          </div>
-        );
-      },
+      title: "Gender",
+      dataIndex: "gender",
+      width: 300,
+    },
+    {
+      title: "Birth Day",
+      dataIndex: "birth",
+      width: 300,
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      width: 300,
+    },
+    {
+      title: "Contact",
+      dataIndex: "contact",
+      width: 300,
     },
     {
       title: "Active",

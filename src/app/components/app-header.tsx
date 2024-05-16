@@ -24,6 +24,7 @@ import {
   useCustomer,
   useDecreaseToCart,
   useDeleteToCart,
+  useMyCarts,
   useUpdateUser,
 } from "@/pages/app.loader";
 
@@ -34,6 +35,8 @@ export const AppHeader: React.FC = () => {
     setOpen(true);
   };
   const { data: dataUser, isLoading } = useCustomer();
+  const { data: dataMyCart } = useMyCarts();
+  localStorage.setItem("dataMyCart", JSON.stringify(dataMyCart));
   const onClose = () => {
     setOpen(false);
   };
@@ -129,7 +132,7 @@ export const AppHeader: React.FC = () => {
         footer={
           <Col style={{ padding: 15 }}>
             <Row justify={"space-between"}>
-              {dataUser?.cart?.data?.length > 0 && (
+              {dataMyCart?.length > 0 && (
                 <Col style={{ paddingTop: 13 }}>
                   <Button
                     className="button"
@@ -143,7 +146,11 @@ export const AppHeader: React.FC = () => {
                 <h3>
                   Subtotal:{" "}
                   <span style={{ color: "#edb932" }}>
-                    ${dataUser?.cart?.total}
+                    $
+                    {dataMyCart
+                      ?.map((item: any) => item.price * item.quantity)
+                      .reduce((a: any, b: any) => a + b, 0)
+                      .toFixed(2)}
                   </span>
                 </h3>
               </Col>
@@ -158,24 +165,32 @@ export const AppHeader: React.FC = () => {
       >
         <Col>
           {!isLoading &&
-            dataUser?.cart?.data?.map((item: any) => {
+            dataMyCart?.map((item: any) => {
               return (
                 <Row className="product-cart">
                   <Col span={4}>
-                    <Image src={item.urlImg} preview={false} />
+                    <Image
+                      src={item?.url}
+                      preview={false}
+                      width={60}
+                      style={{ height: 60, marginTop: 20 }}
+                    />
                   </Col>
                   <Col span={16} style={{ paddingTop: 10, paddingLeft: 10 }}>
                     <Row>
-                      <h3>{item.color}</h3>
+                      <h3>{item?.name}</h3>
                     </Row>
                     <Row>
                       <Button.Group>
-                        <Button onClick={handleDecrease} size={"small"}>
+                        <Button
+                          disabled={item?.quantity > 1 ? false : true}
+                          onClick={handleDecrease}
+                          size={"small"}
+                        >
                           -
                         </Button>
                         <Input
-                          // onChange={handleInputChange}
-                          value={item.count}
+                          value={item?.quantity}
                           size="small"
                           style={{ width: "40px", textAlign: "center" }}
                         />
@@ -188,10 +203,10 @@ export const AppHeader: React.FC = () => {
                   <Col span={4} style={{ paddingTop: 30 }}>
                     <Row justify={"center"}>
                       {" "}
-                      <DeleteOutlined onClick={() => handleDelete(item._id)} />
+                      <DeleteOutlined onClick={() => handleDelete(item)} />
                     </Row>
                     <Row justify={"center"} style={{ paddingTop: 10 }}>
-                      <h3 style={{ color: "#edb932" }}>${item.price}</h3>{" "}
+                      <h3 style={{ color: "#edb932" }}>${item?.price}</h3>{" "}
                     </Row>
                   </Col>
                 </Row>
@@ -253,6 +268,7 @@ export const AppHeader: React.FC = () => {
   function handleLogout(key: any) {
     localStorage.removeItem("token");
     navigate(key);
+    window.location.reload();
   }
   function handleEditUser() {
     setVisible(true);
@@ -261,14 +277,14 @@ export const AppHeader: React.FC = () => {
   function handleMyOrder() {
     navigate("/my-order");
   }
-  function handleDelete(id: any) {
-    mutateDelete(id);
+  function handleDelete(value: any) {
+    mutateDelete(value?.productItemId);
   }
   function increaseCount(value: any) {
-    mutateIncrease(value._id);
+    mutateIncrease(value?.productItemId);
   }
 
   function decreaseCount(value: any) {
-    mutateDecrease(value._id);
+    mutateDecrease(value?.productItemId);
   }
 };
