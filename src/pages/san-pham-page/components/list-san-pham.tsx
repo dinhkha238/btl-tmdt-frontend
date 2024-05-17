@@ -1,6 +1,15 @@
 import { ScrollToTop } from "@/app/components/scroll";
+import {
+  useCreateFeedback,
+  useFeedbackByIdProduct,
+  useProductItemById,
+} from "@/pages/admin-page/product.loader";
 import { useAddToCart, useProducts } from "@/pages/app.loader";
-import { MenuUnfoldOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import {
+  EyeOutlined,
+  MenuUnfoldOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
 import {
   Row,
   Col,
@@ -11,7 +20,12 @@ import {
   Input,
   Select,
   Popover,
+  Modal,
+  Button,
+  Rate,
+  Form,
 } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import MenuItem from "antd/es/menu/MenuItem";
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -61,9 +75,34 @@ export const ListSanPham = () => {
     sort: titleSort,
   });
   const [valueSelect, setValueSelect] = useState("Default sorting");
-  const { mutate } = useAddToCart();
-  const content = <span>Add to card</span>;
+  const [showInforProduct, setShowInforProduct] = useState(false);
+  const [idProduct, setIdProduct] = useState(1);
+  const [openAddReviews, setOpenAddReviews] = useState(false);
 
+  const { mutate } = useAddToCart();
+  const { mutate: mutateFeedback } = useCreateFeedback();
+  const { data: dataProduct } = useProductItemById({ id: idProduct });
+  const { data: dataFeedback } = useFeedbackByIdProduct({ id: idProduct });
+  const content = <span>Add to card</span>;
+  const [form] = Form.useForm();
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        values.productId = idProduct;
+        mutateFeedback(values);
+        setOpenAddReviews(false);
+        form.resetFields();
+      })
+      .catch((info) => {
+        console.log("Validate Failed:", info);
+      });
+  };
+
+  const handleCancel = () => {
+    setOpenAddReviews(false);
+    form.resetFields();
+  };
   return (
     <>
       <div className="products">
@@ -136,6 +175,12 @@ export const ListSanPham = () => {
                               onClick={handleAddToCart}
                             />
                           </Popover>
+                          <Popover content={"Product detail"} placement="left">
+                            <EyeOutlined
+                              className="icon-detail"
+                              onClick={handleProductDetail}
+                            />
+                          </Popover>
                         </Row>
                         <div className="infor-product">
                           <Row justify="center">{item.name}</Row>
@@ -147,7 +192,10 @@ export const ListSanPham = () => {
                       </Col>
                     );
                     function handleAddToCart() {
-                      addToCart(item.id);
+                      addToCart(item.productId);
+                    }
+                    function handleProductDetail() {
+                      productDetail(item.productId);
                     }
                   })
                 ) : (
@@ -162,6 +210,131 @@ export const ListSanPham = () => {
           </Col>
         </Row>
       </div>
+      {showInforProduct && (
+        <Modal
+          title={"Product information"}
+          visible={showInforProduct}
+          onCancel={() => setShowInforProduct(false)}
+          footer={false}
+          width={700}
+        >
+          <Row>
+            <Col span={12}>
+              <Image
+                preview={false}
+                src={dataProduct?.url}
+                width={300}
+                style={{ height: 300 }}
+              />
+            </Col>
+            <Col span={12}>
+              <Row style={{ fontSize: 24 }}>
+                {dataProduct?.name + " - " + dataProduct?.summary}
+              </Row>
+              <Row style={{ fontSize: 30, color: "orange" }}>
+                ${dataProduct?.price}
+              </Row>
+              <Row justify={"center"}>
+                <Col>
+                  <Button
+                    onClick={() => addToCart(idProduct)}
+                    style={{
+                      marginTop: 160,
+                      width: 320,
+                      fontSize: 20,
+                      height: 50,
+                    }}
+                  >
+                    Add to cart
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <Row
+            style={{
+              borderTop: "1px solid #ccc",
+              marginTop: 40,
+              marginBottom: 20,
+              paddingTop: 20,
+            }}
+          >
+            <Col
+              span={12}
+              style={{
+                fontSize: 20,
+              }}
+            >
+              PRODUCT REVIEWS
+            </Col>
+            <Col span={12}>
+              <Row justify={"end"}>
+                <Button type="primary" onClick={() => setOpenAddReviews(true)}>
+                  Add reviews
+                </Button>
+              </Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              {dataFeedback?.map((item: any) => {
+                return (
+                  <div
+                    style={{
+                      borderBottom: "1px solid #ccc",
+                      marginBottom: 20,
+                      paddingBottom: 20,
+                    }}
+                  >
+                    <Row>{item?.customer}</Row>
+                    <Row>
+                      <Rate allowHalf defaultValue={item?.rating} disabled />
+                    </Row>
+                    <Row>{item?.createdAt}</Row>
+                    <Row>{item?.description}</Row>
+                  </div>
+                );
+              })}
+            </Col>
+          </Row>
+        </Modal>
+      )}
+      {openAddReviews && (
+        <Modal
+          title={"Add reviews"}
+          visible={openAddReviews}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={[
+            <Button key="cancel" onClick={handleCancel}>
+              Hủy
+            </Button>,
+            <Button key="submit" type="primary" onClick={handleOk}>
+              OK
+            </Button>,
+          ]}
+        >
+          <Form form={form}>
+            <Form.Item
+              label="Rating"
+              name="rating"
+              rules={[{ required: true, message: "Vui lòng nhập rating!" }]}
+            >
+              <Rate allowHalf defaultValue={0} />
+            </Form.Item>
+
+            <Form.Item
+              label="Description"
+              name="description"
+              rules={[
+                { required: true, message: "Vui lòng nhập description!" },
+              ]}
+            >
+              <TextArea />
+            </Form.Item>
+          </Form>
+        </Modal>
+      )}
     </>
   );
   function handleSelect(e: any) {
@@ -192,5 +365,9 @@ export const ListSanPham = () => {
   }
   function addToCart(value: any) {
     mutate(value);
+  }
+  function productDetail(value: any) {
+    setIdProduct(value);
+    setShowInforProduct(true);
   }
 };

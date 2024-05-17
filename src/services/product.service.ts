@@ -7,3 +7,18 @@ export const getProductItems = async (select:any) => {
     });
     return result.data;
 }
+
+export const getProductById = async (data:any) => {
+    const result = await apiClient.get(`/get-product-item/${data.id}`);
+    return result.data;
+}
+
+export const getFeedbackByIdProduct = async (data:any) => {
+    const result = await apiClient.get(`/feedback-by-id-product/${data.id}`);
+    return result.data;
+}
+
+export const addFeedback = async (data:any) => {
+    const result = await apiClient.post(`/add-feedback`,data);
+    return result.data;
+}
