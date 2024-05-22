@@ -3,7 +3,7 @@ import "../components/app-header.css";
 export const AppFooter = () => {
   return (
     <>
-      <Row>
+      <Row justify={"space-between"}>
         <Col span={12}>
           <Row>
             <Image

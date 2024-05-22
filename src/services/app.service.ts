@@ -113,7 +113,7 @@ export const deleteCustomer = async (id:any) => {
     return result.data;
 }
 export const deleteOrder = async (id:any) => {
-    const result = await apiClient.delete(`/delete-order/${id}`);
+    const result = await apiClient.put(`/cancel-order/${id}`);
     return result.data;
 }
 

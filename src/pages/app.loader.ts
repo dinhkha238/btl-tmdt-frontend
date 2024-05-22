@@ -246,11 +246,11 @@ export const useDeleteOrder = () => {
   {
 
     onSuccess:() => {
-      queryClient.invalidateQueries(CACHE_KEYS.InforOrders);
-      message.success("Delete order success")
+      queryClient.invalidateQueries(CACHE_KEYS.InforMyOrders);
+      message.success("Cancel order success")
     },
     onError:() => {
-      message.error("Delete order failed")
+      message.error("Cancel order failed")
     }
   }
   )

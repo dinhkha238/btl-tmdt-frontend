@@ -1,5 +1,5 @@
 import { useDeleteOrder, useMyOrders, useOrderById } from "@/pages/app.loader";
-import { Alert, Button, Col, Modal, Row, Table, Image } from "antd";
+import { Alert, Button, Col, Modal, Row, Table, Image, Tag } from "antd";
 import { useState } from "react";
 
 export const MyOrder = () => {
@@ -40,14 +40,45 @@ export const MyOrder = () => {
       },
     },
     {
-      title: "Hoạt động",
+      title: "Trạng thái",
       dataIndex: "payStatus",
       width: 200,
       render: (status: any) => {
         if (status === 0) {
-          return <Button>Hủy đơn hàng</Button>;
+          return (
+            <>
+              <Tag color="blue">Đang xử lý</Tag>
+            </>
+          );
+        } else if (status === 1) {
+          return (
+            <>
+              <Tag color="green">Đơn hàng đã hoàn thành</Tag>
+            </>
+          );
         } else {
-          return <div>Đơn hàng đã được chấp nhận</div>;
+          return (
+            <>
+              <Tag color="red">Đã hủy</Tag>
+            </>
+          );
+        }
+      },
+    },
+    {
+      title: "Hoạt động",
+      dataIndex: "payStatus",
+      render: (payStatus: any, dataOrder: any) => {
+        if (payStatus === 0) {
+          return (
+            <Button danger onClick={() => handleShowModalDelete(dataOrder)}>
+              Hủy đơn hàng
+            </Button>
+          );
+        } else if (payStatus === 1) {
+          return <Button type="primary">Đánh giá</Button>;
+        } else {
+          return <Button>Mua lại</Button>;
         }
       },
     },
@@ -58,6 +89,10 @@ export const MyOrder = () => {
   };
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+  const handleShowModalDelete = (data: any) => {
+    setIdSelected(data?.id);
+    setIsModalOpen(true);
   };
   const handleOkDelete = () => {
     mutateDeleteOrder(idSelected);
@@ -97,20 +132,25 @@ export const MyOrder = () => {
         footer={null}
       >
         <Row>
-          <Col span={24}>
-            <Row>Thông tin vận chuyển</Row>
-            <Row>
-              {dataOrderById?.shipment?.name +
-                " - " +
-                dataOrderById?.shipment?.address +
-                " - " +
-                dataOrderById?.shipment?.id}
-            </Row>
+          <Col span={8}>Địa chỉ nhận hàng</Col>
+          <Col span={16}>
+            <Row justify={"end"}>{dataOrderById?.shipAdress}</Row>
           </Col>
         </Row>
         <Row>
-          <Col span={24}>
-            <Row>Địa chỉ nhận hàng</Row>
+          <Col span={8}>Số điện thoại</Col>
+          <Col span={16}>
+            <Row justify={"end"}>{dataOrderById?.phone}</Row>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={8}>Đơn vị vận chuyển</Col>
+          <Col span={16}>
+            <Row justify={"end"}>
+              {dataOrderById?.shipment?.name +
+                " - " +
+                dataOrderById?.shipment?.address}
+            </Row>
           </Col>
         </Row>
         <Row>
@@ -118,21 +158,26 @@ export const MyOrder = () => {
             <Row>Danh sách đơn hàng</Row>
             {dataOrderById?.cart?.map((item: any) => {
               return (
-                <Row>
-                  <Col span={8}>
+                <Row style={{ marginTop: 20 }}>
+                  <Col span={4}>
                     {
                       <Image
                         src={item?.url}
                         preview={false}
-                        width={40}
-                        style={{ height: 40, marginTop: 20 }}
+                        width={50}
+                        style={{ height: 50 }}
                       />
                     }
                   </Col>
-                  <Col span={16}>
-                    <Row>{item?.name}</Row>
-                    <Row justify={"end"}>{"x" + item?.quantity}</Row>
-                    <Row justify={"end"}>{"$" + item?.price}</Row>
+                  <Col span={14}>
+                    <Row>
+                      <Col>{item?.name}</Col>
+                    </Row>
+                  </Col>
+                  <Col span={6}>
+                    <Row justify={"end"}>
+                      {"$" + item?.price + " x " + item?.quantity}
+                    </Row>
                   </Col>
                 </Row>
               );
@@ -169,9 +214,9 @@ export const MyOrder = () => {
           </Col>
         </Row>
         <Row>
-          <Col span={24}>
-            <Row>Phương thức thanh toán</Row>
-            <Row>{dataOrderById?.payment?.name}</Row>
+          <Col span={8}>Phương thức thanh toán</Col>
+          <Col span={16}>
+            <Row justify={"end"}>{dataOrderById?.payment?.name}</Row>
           </Col>
         </Row>
       </Modal>

@@ -198,7 +198,7 @@ export const CheckOut = () => {
                 options={dataVouchers?.map((item: any) => {
                   return {
                     value: item.id,
-                    label: item.name,
+                    label: item.name + " - $" + item.value,
                   };
                 })}
               />
@@ -305,6 +305,8 @@ export const CheckOut = () => {
       shipmentId: feeShip?.id,
       voucherId: voucher?.id,
       createdAt: formatDate(new Date()),
+      shipAdress: inputAddress,
+      phone: inputPhone,
     };
     createOrder(order);
     deleteAllCart();
