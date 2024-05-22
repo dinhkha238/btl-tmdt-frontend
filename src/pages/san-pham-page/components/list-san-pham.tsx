@@ -1,6 +1,5 @@
 import { ScrollToTop } from "@/app/components/scroll";
 import {
-  useCreateFeedback,
   useFeedbackByIdProduct,
   useProductItemById,
 } from "@/pages/admin-page/product.loader";
@@ -23,9 +22,7 @@ import {
   Modal,
   Button,
   Rate,
-  Form,
 } from "antd";
-import TextArea from "antd/es/input/TextArea";
 import MenuItem from "antd/es/menu/MenuItem";
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -50,13 +47,8 @@ const items: MenuItem[] = [
   getItem("All", "0"),
   getItem("Bathroom", "1"),
   getItem("Bedroom", "2"),
-  getItem("Cabinet", "3"),
-  getItem("Chair", "4"),
-  getItem("Home Office", "5"),
-  getItem("Living Room", "6"),
-  getItem("Sofa", "7"),
-  getItem("Kitchen", "8"),
-  getItem("Stool", "9"),
+  getItem("Livingroom", "3"),
+  getItem("Kitchen", "4"),
 ];
 export const ListSanPham = () => {
   const [collapsed, setCollapsed] = useState(true);
@@ -77,32 +69,16 @@ export const ListSanPham = () => {
   const [valueSelect, setValueSelect] = useState("Default sorting");
   const [showInforProduct, setShowInforProduct] = useState(false);
   const [idProduct, setIdProduct] = useState(1);
-  const [openAddReviews, setOpenAddReviews] = useState(false);
 
   const { mutate } = useAddToCart();
-  const { mutate: mutateFeedback } = useCreateFeedback();
   const { data: dataProduct } = useProductItemById({ id: idProduct });
   const { data: dataFeedback } = useFeedbackByIdProduct({ id: idProduct });
-  const content = <span>Add to card</span>;
-  const [form] = Form.useForm();
-  const handleOk = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        values.productId = idProduct;
-        mutateFeedback(values);
-        setOpenAddReviews(false);
-        form.resetFields();
-      })
-      .catch((info) => {
-        console.log("Validate Failed:", info);
-      });
-  };
 
-  const handleCancel = () => {
-    setOpenAddReviews(false);
-    form.resetFields();
-  };
+  const params = new URLSearchParams(window.location.search);
+  const optionValue = params.get("option");
+  const location = items.findIndex((item: any) => item?.label === optionValue);
+  const content = <span>Add to card</span>;
+
   return (
     <>
       <div className="products">
@@ -123,7 +99,7 @@ export const ListSanPham = () => {
                 </Row>
               </div>
               <Menu
-                defaultSelectedKeys={["0"]}
+                defaultSelectedKeys={location === -1 ? ["0"] : [`${location}`]}
                 defaultOpenKeys={["sub1"]}
                 mode="inline"
                 theme="light"
@@ -267,13 +243,6 @@ export const ListSanPham = () => {
             >
               PRODUCT REVIEWS
             </Col>
-            <Col span={12}>
-              <Row justify={"end"}>
-                <Button type="primary" onClick={() => setOpenAddReviews(true)}>
-                  Add reviews
-                </Button>
-              </Row>
-            </Col>
           </Row>
           <Row>
             <Col>
@@ -297,42 +266,6 @@ export const ListSanPham = () => {
               })}
             </Col>
           </Row>
-        </Modal>
-      )}
-      {openAddReviews && (
-        <Modal
-          title={"Add reviews"}
-          visible={openAddReviews}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          footer={[
-            <Button key="cancel" onClick={handleCancel}>
-              Hủy
-            </Button>,
-            <Button key="submit" type="primary" onClick={handleOk}>
-              OK
-            </Button>,
-          ]}
-        >
-          <Form form={form}>
-            <Form.Item
-              label="Rating"
-              name="rating"
-              rules={[{ required: true, message: "Vui lòng nhập rating!" }]}
-            >
-              <Rate allowHalf defaultValue={0} />
-            </Form.Item>
-
-            <Form.Item
-              label="Description"
-              name="description"
-              rules={[
-                { required: true, message: "Vui lòng nhập description!" },
-              ]}
-            >
-              <TextArea />
-            </Form.Item>
-          </Form>
         </Modal>
       )}
     </>

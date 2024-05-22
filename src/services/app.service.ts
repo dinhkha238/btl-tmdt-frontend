@@ -116,4 +116,8 @@ export const deleteOrder = async (id:any) => {
     const result = await apiClient.put(`/cancel-order/${id}`);
     return result.data;
 }
+export const reviewedOrder = async (id:any) => {
+    const result = await apiClient.put(`/reviewed-order/${id}`);
+    return result.data;
+}
 
