@@ -36,12 +36,14 @@ export const SignUp: React.FC = () => {
     return Promise.resolve();
   };
   const validatePhoneNumber = (_: any, value: any) => {
-    const phoneRegex = /^[0-9]{10,15}$/;
+    const phoneRegex = /^[0-9]{10}$/;
     if (!value) {
       return Promise.reject(new Error("Please input contact!"));
     }
     if (!phoneRegex.test(value)) {
-      return Promise.reject(new Error("Please input a valid phone number!"));
+      return Promise.reject(
+        new Error("Please input a valid phone number with exactly 10 digits!")
+      );
     }
     return Promise.resolve();
   };
