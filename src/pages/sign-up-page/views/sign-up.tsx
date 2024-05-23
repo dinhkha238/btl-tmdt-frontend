@@ -9,6 +9,42 @@ export const SignUp: React.FC = () => {
   const onFinish = (values: any) => {
     mutate(values);
   };
+  const validatePassword = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error("Please input password!"));
+    }
+    if (value.length < 8) {
+      return Promise.reject(
+        new Error("Password must be at least 8 characters long!")
+      );
+    }
+    if (!/[A-Z]/.test(value)) {
+      return Promise.reject(
+        new Error("Password must contain at least one uppercase letter!")
+      );
+    }
+    if (!/[a-z]/.test(value)) {
+      return Promise.reject(
+        new Error("Password must contain at least one lowercase letter!")
+      );
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+      return Promise.reject(
+        new Error("Password must contain at least one special character!")
+      );
+    }
+    return Promise.resolve();
+  };
+  const validatePhoneNumber = (_: any, value: any) => {
+    const phoneRegex = /^[0-9]{10,15}$/;
+    if (!value) {
+      return Promise.reject(new Error("Please input contact!"));
+    }
+    if (!phoneRegex.test(value)) {
+      return Promise.reject(new Error("Please input a valid phone number!"));
+    }
+    return Promise.resolve();
+  };
   return (
     <div className="col-bgr">
       <Form
@@ -19,7 +55,7 @@ export const SignUp: React.FC = () => {
         className="form-complain-login"
       >
         <Row justify={"center"}>
-          <div className="font-middle " style={{ paddingBottom: 50 }}>
+          <div className="font-middle " style={{ paddingBottom: 30 }}>
             Sign Up
           </div>
         </Row>
@@ -35,11 +71,17 @@ export const SignUp: React.FC = () => {
         >
           <Input style={{ height: 40 }} placeholder="Username" />
         </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input password !" }]}
-        >
+        <Form.Item name="password" rules={[{ validator: validatePassword }]}>
           <Input.Password style={{ height: 40 }} placeholder="Password" />
+        </Form.Item>
+        <Form.Item name="contact" rules={[{ validator: validatePhoneNumber }]}>
+          <Input style={{ height: 40 }} placeholder="Contact" />
+        </Form.Item>
+        <Form.Item
+          name="address"
+          rules={[{ required: true, message: "Please input address !" }]}
+        >
+          <Input style={{ height: 40 }} placeholder="Address" />
         </Form.Item>
         <Row justify={"end"} style={{ marginBottom: 30 }}>
           <Row
