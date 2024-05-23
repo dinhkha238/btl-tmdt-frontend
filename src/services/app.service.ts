@@ -120,4 +120,8 @@ export const reviewedOrder = async (id:any) => {
     const result = await apiClient.put(`/reviewed-order/${id}`);
     return result.data;
 }
+export const acceptOrder = async (id:any) => {
+    const result = await apiClient.put(`/accept-order/${id}`);
+    return result.data;
+}
 

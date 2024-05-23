@@ -145,12 +145,14 @@ export const ListSanPham = () => {
                             width={200}
                             style={{ height: 200 }}
                           />
-                          <Popover content={content} placement="left">
-                            <ShoppingCartOutlined
-                              className="icon-add-cart"
-                              onClick={handleAddToCart}
-                            />
-                          </Popover>
+                          {item.inStock > 0 && (
+                            <Popover content={content} placement="left">
+                              <ShoppingCartOutlined
+                                className="icon-add-cart"
+                                onClick={handleAddToCart}
+                              />
+                            </Popover>
+                          )}
                           <Popover content={"Product detail"} placement="left">
                             <EyeOutlined
                               className="icon-detail"
@@ -210,6 +212,12 @@ export const ListSanPham = () => {
               <Row style={{ fontSize: 30, color: "orange" }}>
                 ${dataProduct?.price}
               </Row>
+              <Row>
+                <Col>Mô tả: {dataProduct?.spec}</Col>
+              </Row>
+              <Row>
+                <Col>Tồn kho: {dataProduct?.inStock}</Col>
+              </Row>
               <Row justify={"center"}>
                 <Col>
                   <Button
@@ -220,6 +228,7 @@ export const ListSanPham = () => {
                       fontSize: 20,
                       height: 50,
                     }}
+                    disabled={dataProduct?.inStock === 0}
                   >
                     Add to cart
                   </Button>

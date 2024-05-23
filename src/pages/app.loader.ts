@@ -1,4 +1,4 @@
-import { addCustomer, addProduct, addToCart, checkLogin, createOrder, decreaseProduct, deleteAllCart, deleteCustomer, deleteOrder, deleteProduct, deleteToCart, getCustomer, getCustomers, getOrders, getOrderById, getProducts, updateCustomer, updateProduct, getCarts, getCartById, getMyOrder, getMyCarts, getAllPayments, getAllShipments, getAllVouchers, reviewedOrder } from "@/services/app.service";
+import { addCustomer, addProduct, addToCart, checkLogin, createOrder, decreaseProduct, deleteAllCart, deleteCustomer, deleteOrder, deleteProduct, deleteToCart, getCustomer, getCustomers, getOrders, getOrderById, getProducts, updateCustomer, updateProduct, getCarts, getCartById, getMyOrder, getMyCarts, getAllPayments, getAllShipments, getAllVouchers, reviewedOrder, acceptOrder } from "@/services/app.service";
 import { message } from "antd";
 import { useMutation, useQuery, useQueryClient } from "react-query"
 import { useNavigate } from "react-router-dom";
@@ -270,6 +270,23 @@ export const useReviewedOrder = () => {
       }
   }
   )
+}
+export const useAcceptOrder = () => {
+  const queryClient = useQueryClient();
+  return useMutation((id: any) => {
+      return acceptOrder(id)
+  },
+  {
+      onSuccess:() => {
+          queryClient.invalidateQueries(CACHE_KEYS.InforOrders);
+          message.success("Accept order success")
+      },
+      onError:() => {
+          message.error("Accept order failed")
+      }
+  }
+  )
+
 }
 
 // query

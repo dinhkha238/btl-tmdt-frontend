@@ -1,4 +1,4 @@
-import { useOrderById, useOrders } from "@/pages/app.loader";
+import { useAcceptOrder, useOrderById, useOrders } from "@/pages/app.loader";
 import {
   Button,
   Col,
@@ -19,6 +19,8 @@ export const Order = () => {
   const { data: dataOrderById } = useOrderById({
     id: idOrder,
   });
+  const { mutate: mutateAcceptOrder } = useAcceptOrder();
+
   const columns = [
     {
       title: "ID",
@@ -48,9 +50,17 @@ export const Order = () => {
       title: "Trạng thái",
       dataIndex: "payStatus",
       width: 200,
-      render: (status: any) => {
+      render: (status: any, data: any) => {
         if (status === 0) {
-          return <Button>Xác nhận</Button>;
+          return (
+            <Button
+              onClick={() => {
+                mutateAcceptOrder(data?.id);
+              }}
+            >
+              Xác nhận
+            </Button>
+          );
         } else {
           return <div>Đã thanh toán</div>;
         }

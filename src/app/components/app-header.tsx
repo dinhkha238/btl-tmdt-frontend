@@ -194,7 +194,13 @@ export const AppHeader: React.FC = () => {
                           size="small"
                           style={{ width: "40px", textAlign: "center" }}
                         />
-                        <Button onClick={handleIncrease} size={"small"}>
+                        <Button
+                          disabled={
+                            item?.quantity < item?.inStock ? false : true
+                          }
+                          onClick={handleIncrease}
+                          size={"small"}
+                        >
                           +
                         </Button>
                       </Button.Group>
