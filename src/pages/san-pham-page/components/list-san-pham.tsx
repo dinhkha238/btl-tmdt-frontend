@@ -113,7 +113,7 @@ export const ListSanPham = () => {
             <div className="product-products">
               <Row>
                 <Col push={2} span={4}>
-                  <Input placeholder="Tìm kiếm" onChange={handleSearch} />
+                  <Input placeholder="Tìm kiếm" onPressEnter={handleSearch} />
                 </Col>
                 <Col push={14}>
                   <Select
