@@ -6,10 +6,11 @@ import { User } from "../components/user";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Order } from "../components/order";
 import { Cart } from "../components/cart";
+import { Statistic } from "../components/statistic";
 
 export const Admin = () => {
   const navigate = useNavigate();
-  const [selectedMenu, setSelectedMenu] = useState("products");
+  const [selectedMenu, setSelectedMenu] = useState("statistics");
   const handleMenuClick = (e: any) => {
     setSelectedMenu(e.key); // Cập nhật trạng thái khi mục SideNav được chọn
   };
@@ -19,14 +20,17 @@ export const Admin = () => {
       {isAuthenticated == "true" ? (
         <Row>
           <Col span={4}>
-            <Layout style={{ minHeight: "100vh", width: 100 }}>
+            <Layout
+              style={{ minHeight: "100vh", width: 100, position: "fixed" }}
+            >
               <Sider>
                 <Menu
                   theme="dark"
                   mode="vertical"
-                  defaultSelectedKeys={["products"]}
+                  defaultSelectedKeys={["statistics"]}
                   onClick={handleMenuClick} //Gọi hàm xử lý khi click vào mục SideNav
                 >
+                  <Menu.Item key="statistics">Thống kê</Menu.Item>
                   <Menu.Item key="products">Sản phẩm</Menu.Item>
                   <Menu.Item key="users">Người dùng</Menu.Item>
                   <Menu.Item key="carts">Giỏ hàng</Menu.Item>
@@ -41,6 +45,7 @@ export const Admin = () => {
             {selectedMenu === "users" && <User />}
             {selectedMenu === "carts" && <Cart />}
             {selectedMenu === "orders" && <Order />}
+            {selectedMenu === "statistics" && <Statistic />}
           </Col>
         </Row>
       ) : (

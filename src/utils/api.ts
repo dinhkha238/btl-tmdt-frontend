@@ -4,6 +4,9 @@ import axios from "axios";
 export const apiClient =  axios.create({
   baseURL: BASE_URL,
   timeout: 60000,
+  headers: {
+    "ngrok-skip-browser-warning": "any",
+  }
 });
 apiClient.interceptors.request.use(
   (config) => {

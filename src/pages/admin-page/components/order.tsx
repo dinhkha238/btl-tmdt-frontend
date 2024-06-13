@@ -7,6 +7,7 @@ import {
   Modal,
   Row,
   Table,
+  Image,
 } from "antd";
 import { useState } from "react";
 
@@ -96,82 +97,103 @@ export const Order = () => {
         </Col>
       </Row>
       <Table dataSource={dataOrder} columns={columns} />;
-      <Modal
-        title="Chi tiết đơn hàng"
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Row>
-          <Col span={24}>
-            <Row>Thông tin vận chuyển</Row>
-            <Row>
-              {dataOrderById?.shipment?.name +
-                " - " +
-                dataOrderById?.shipment?.address +
-                " - " +
-                dataOrderById?.shipment?.id}
-            </Row>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <Row>Địa chỉ nhận hàng</Row>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <Row>Danh sách đơn hàng</Row>
-            {dataOrderById?.cart?.map((item: any) => {
-              return (
-                <Row>
-                  <Col span={8}>Image</Col>
-                  <Col span={16}>
-                    <Row>{item?.name}</Row>
-                    <Row justify={"end"}>{"x" + item?.quantity}</Row>
-                    <Row justify={"end"}>{"$" + item?.price}</Row>
-                  </Col>
-                </Row>
-              );
-            })}
-          </Col>
-        </Row>
-        <Row>
-          <Col span={8}>Tổng tiền hàng</Col>
-          <Col span={16}>
-            <Row justify={"end"}>
-              $
-              {dataOrderById?.totalOrder +
-                dataOrderById?.voucher?.value -
-                dataOrderById?.shipment?.fees}
-            </Row>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={8}>Phí vận chuyển</Col>
-          <Col span={16}>
-            <Row justify={"end"}>${dataOrderById?.shipment?.fees}</Row>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={8}>Voucher</Col>
-          <Col span={16}>
-            <Row justify={"end"}>-${dataOrderById?.voucher?.value}</Row>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={8}>Thành tiền</Col>
-          <Col span={16}>
-            <Row justify={"end"}>${dataOrderById?.totalOrder}</Row>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <Row>Phương thức thanh toán</Row>
-            <Row>{dataOrderById?.payment?.name}</Row>
-          </Col>
-        </Row>
-      </Modal>
+      {isModalVisible && (
+        <Modal
+          title="Chi tiết đơn hàng"
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <Row>
+            <Col span={8}>Địa chỉ nhận hàng</Col>
+            <Col span={16}>
+              <Row justify={"end"}>{dataOrderById?.shipAdress}</Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>Số điện thoại</Col>
+            <Col span={16}>
+              <Row justify={"end"}>{dataOrderById?.phone}</Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>Đơn vị vận chuyển</Col>
+            <Col span={16}>
+              <Row justify={"end"}>
+                {dataOrderById?.shipment?.name +
+                  " - " +
+                  dataOrderById?.shipment?.address}
+              </Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <Row>Danh sách đơn hàng</Row>
+              {dataOrderById?.cart?.map((item: any) => {
+                return (
+                  <Row style={{ marginTop: 20 }}>
+                    <Col span={4}>
+                      {
+                        <Image
+                          src={item?.url}
+                          preview={false}
+                          width={50}
+                          style={{ height: 50 }}
+                        />
+                      }
+                    </Col>
+                    <Col span={14}>
+                      <Row>
+                        <Col>{item?.name}</Col>
+                      </Row>
+                    </Col>
+                    <Col span={6}>
+                      <Row justify={"end"}>
+                        {"$" + item?.price + " x " + item?.quantity}
+                      </Row>
+                    </Col>
+                  </Row>
+                );
+              })}
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>Tổng tiền hàng</Col>
+            <Col span={16}>
+              <Row justify={"end"}>
+                $
+                {dataOrderById?.totalOrder +
+                  dataOrderById?.voucher?.value -
+                  dataOrderById?.shipment?.fees}
+              </Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>Phí vận chuyển</Col>
+            <Col span={16}>
+              <Row justify={"end"}>${dataOrderById?.shipment?.fees}</Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>Voucher</Col>
+            <Col span={16}>
+              <Row justify={"end"}>-${dataOrderById?.voucher?.value}</Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>Thành tiền</Col>
+            <Col span={16}>
+              <Row justify={"end"}>${dataOrderById?.totalOrder}</Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>Phương thức thanh toán</Col>
+            <Col span={16}>
+              <Row justify={"end"}>{dataOrderById?.payment?.name}</Row>
+            </Col>
+          </Row>
+        </Modal>
+      )}
     </div>
   );
 };

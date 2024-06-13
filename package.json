@@ -18,7 +18,8 @@
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.11.2",
-    "react-scroll": "^1.8.9"
+    "react-scroll": "^1.8.9",
+    "recharts": "^2.12.7"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.2",

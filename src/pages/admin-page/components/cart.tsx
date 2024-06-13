@@ -7,6 +7,7 @@ import {
   Modal,
   Row,
   Table,
+  Image,
 } from "antd";
 import { useState } from "react";
 
@@ -93,7 +94,16 @@ export const Cart = () => {
             {dataOrderById?.map((item: any) => {
               return (
                 <Row>
-                  <Col span={8}>Image</Col>
+                  <Col span={8}>
+                    {
+                      <Image
+                        src={item?.url}
+                        preview={false}
+                        width={50}
+                        style={{ height: 50 }}
+                      />
+                    }
+                  </Col>
                   <Col span={16}>
                     <Row>{item?.name}</Row>
                     <Row justify={"end"}>{"x" + item?.quantity}</Row>
