@@ -50,18 +50,28 @@ export const Product = () => {
       width: 300,
     },
     {
-      title: "Summary",
+      title: "RoomType",
       dataIndex: "summary",
       width: 300,
     },
     {
-      title: "Release Date",
-      dataIndex: "releaseDate",
+      title: "Provider",
+      dataIndex: "provider",
       width: 300,
     },
     {
-      title: "provider",
-      dataIndex: "provider",
+      title: "Model",
+      dataIndex: "model",
+      width: 300,
+    },
+    {
+      title: "Version",
+      dataIndex: "version",
+      width: 300,
+    },
+    {
+      title: "Series",
+      dataIndex: "series",
       width: 300,
     },
     {
@@ -73,11 +83,6 @@ export const Product = () => {
       title: "Price",
       dataIndex: "price",
       width: 500,
-    },
-    {
-      title: "Added Date",
-      dataIndex: "addedDate",
-      width: 300,
     },
     {
       title: "Inventory",
@@ -101,13 +106,13 @@ export const Product = () => {
         function handleEdit() {
           setOptionModal("Edit");
           setVisible(true);
-          setIdSelected(data._id);
+          setIdSelected(data.id);
           form.setFieldsValue(data);
         }
         function handleDelete() {
-          setIdSelected(data._id);
+          setIdSelected(data.id);
           setIsModalOpen(true);
-          setUserSelected(data.color);
+          setUserSelected(data.name);
         }
       },
     },
@@ -139,7 +144,7 @@ export const Product = () => {
       form
         .validateFields()
         .then((values) => {
-          var a = { ...values, _id: idSelected };
+          var a = { ...values, id: idSelected };
           mutateUpdateProduct(a);
           form.resetFields();
           setVisible(false);
@@ -189,39 +194,80 @@ export const Product = () => {
             name="name"
             rules={[{ required: true, message: "Vui lòng nhập name!" }]}
           >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Room Type"
+            name="summary"
+            rules={[{ required: true, message: "Vui lòng nhập room type!" }]}
+          >
             <Select placeholder="Chọn sản phẩm">
               <Option value="Bathroom">Bathroom</Option>
               <Option value="Bedroom">Bedroom</Option>
-              <Option value="Cabinet">Cabinet</Option>
-              <Option value="Chair">Chair</Option>
-              <Option value="Home Office">Home Office</Option>
               <Option value="Living Room">Living Room</Option>
-              <Option value="Sofa">Sofa</Option>
               <Option value="Kitchen">Kitchen</Option>
-              <Option value="Stool">Stool</Option>
             </Select>
           </Form.Item>
 
           <Form.Item
-            label="Description"
-            name="color"
-            rules={[{ required: true, message: "Vui lòng nhập description!" }]}
+            label="Provider"
+            name="provider"
+            rules={[{ required: true, message: "Vui lòng nhập provider!" }]}
           >
             <Input />
           </Form.Item>
+
+          <Form.Item
+            label="Model"
+            name="model"
+            rules={[{ required: true, message: "Vui lòng nhập model!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Version"
+            name="version"
+            rules={[{ required: true, message: "Vui lòng nhập version!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Series"
+            name="series"
+            rules={[{ required: true, message: "Vui lòng nhập series!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Brand"
+            name="brand"
+            rules={[{ required: true, message: "Vui lòng nhập brand!" }]}
+          >
+            <Input />
+          </Form.Item>
+
           <Form.Item
             label="Price"
             name="price"
-            rules={[
-              { required: true, message: "Vui lòng nhập price!" },
-              { type: "string", message: "Vui lòng nhập price!" },
-            ]}
+            rules={[{ required: true, message: "Vui lòng nhập price!" }]}
           >
-            <Input />
+            <Input type="number" />
           </Form.Item>
+
+          <Form.Item
+            label="Inventory"
+            name="inStock"
+            rules={[{ required: true, message: "Vui lòng nhập inventory!" }]}
+          >
+            <Input type="number" />
+          </Form.Item>
+
           <Form.Item
             label="Url Image"
-            name="urlImg"
+            name="url"
             rules={[{ required: true, message: "Vui lòng nhập url image!" }]}
           >
             <Input />

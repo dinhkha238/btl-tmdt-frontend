@@ -110,8 +110,8 @@ export const SignUp: React.FC = () => {
             >
               <Select
                 options={[
-                  { value: "0", label: "Nam" },
-                  { value: "1", label: "Nữ" },
+                  { value: "Nam", label: "Nam" },
+                  { value: "Nữ", label: "Nữ" },
                 ]}
                 placeholder={"Select gender"}
               />

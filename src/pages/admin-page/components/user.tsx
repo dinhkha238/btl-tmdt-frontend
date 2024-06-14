@@ -5,7 +5,19 @@ import {
   useUpdateUser,
 } from "@/pages/app.loader";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Alert, Button, Col, Form, Input, Modal, Row, Table } from "antd";
+import {
+  Alert,
+  Button,
+  Col,
+  DatePicker,
+  DatePickerProps,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+  Table,
+} from "antd";
 import { useState } from "react";
 
 export const User = () => {
@@ -101,6 +113,7 @@ export const User = () => {
       form
         .validateFields()
         .then((values) => {
+          values.birth = values.birth.format("YYYY-MM-DD");
           mutateAddUser(values);
           form.resetFields();
           setVisible(false);
@@ -112,7 +125,7 @@ export const User = () => {
       form
         .validateFields()
         .then((values) => {
-          var a = { ...values, _id: idSelected };
+          var a = { ...values, id: idSelected };
           mutateUpdateUser(a);
           form.resetFields();
           setVisible(false);
@@ -127,6 +140,53 @@ export const User = () => {
     // Xử lý khi người dùng ấn Hủy
     form.resetFields();
     setVisible(false);
+  };
+  const validatePassword = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error("Please input password!"));
+    }
+    if (value.length < 8) {
+      return Promise.reject(
+        new Error("Password must be at least 8 characters long!")
+      );
+    }
+    if (!/[A-Z]/.test(value)) {
+      return Promise.reject(
+        new Error("Password must contain at least one uppercase letter!")
+      );
+    }
+    if (!/[a-z]/.test(value)) {
+      return Promise.reject(
+        new Error("Password must contain at least one lowercase letter!")
+      );
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+      return Promise.reject(
+        new Error("Password must contain at least one special character!")
+      );
+    }
+    return Promise.resolve();
+  };
+  const validatePhoneNumber = (_: any, value: any) => {
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!value) {
+      return Promise.reject(new Error("Please input contact!"));
+    }
+    if (!phoneRegex.test(value)) {
+      return Promise.reject(
+        new Error("Please input a valid phone number with exactly 10 digits!")
+      );
+    }
+    return Promise.resolve();
+  };
+  const onChange: DatePickerProps["onChange"] = (date, dateString) => {
+    console.log(date, dateString);
+  };
+  const validateGmail = (_: any, value: any) => {
+    if (value && value.endsWith("@gmail.com")) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error("Please input gmail!"));
   };
   return (
     <div>
@@ -161,24 +221,80 @@ export const User = () => {
           <Form.Item
             label="Fullname"
             name="fullname"
-            rules={[{ required: true, message: "Vui lòng nhập fullname!" }]}
+            rules={[{ required: true, message: "Please input fullname !" }]}
           >
-            <Input />
+            <Input style={{ height: 30 }} placeholder="Fullname" />
           </Form.Item>
-          <Form.Item
-            label="User"
-            name="user"
-            rules={[{ required: true, message: "Vui lòng nhập user!" }]}
-          >
-            <Input />
-          </Form.Item>
+          {optionModal === "Add" && (
+            <Form.Item
+              label="Username"
+              name="username"
+              rules={[
+                { validator: validateGmail },
+                { required: true, message: "" },
+              ]}
+            >
+              <Input style={{ height: 30 }} placeholder="Username" />
+            </Form.Item>
+          )}
           <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: true, message: "Vui lòng nhập password!" }]}
+            rules={[
+              { validator: validatePassword },
+              { required: true, message: "" },
+            ]}
           >
-            <Input />
+            <Input.Password style={{ height: 30 }} placeholder="Password" />
           </Form.Item>
+          <Form.Item
+            label="Contact"
+            name="contact"
+            rules={[
+              { validator: validatePhoneNumber },
+              { required: true, message: "" },
+            ]}
+          >
+            <Input style={{ height: 30 }} placeholder="Contact" />
+          </Form.Item>
+          <Form.Item
+            label="Address"
+            name="address"
+            rules={[{ required: true, message: "Please input address" }]}
+          >
+            <Input style={{ height: 30 }} placeholder="Address" />
+          </Form.Item>
+
+          {optionModal === "Add" && (
+            <Row justify={"space-between"}>
+              <Col span={11}>
+                <Form.Item
+                  label="Gender"
+                  name="gender"
+                  rules={[{ required: true, message: "Please input gender !" }]}
+                >
+                  <Select
+                    options={[
+                      { value: "Nam", label: "Nam" },
+                      { value: "Nữ", label: "Nữ" },
+                    ]}
+                    placeholder={"Select gender"}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={11}>
+                <Form.Item
+                  label="Birthday"
+                  name="birth"
+                  rules={[
+                    { required: true, message: "Please input birthday !" },
+                  ]}
+                >
+                  <DatePicker onChange={onChange} />
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
         </Form>
       </Modal>
       <Modal

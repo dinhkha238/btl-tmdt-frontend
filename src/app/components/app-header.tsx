@@ -52,7 +52,7 @@ export const AppHeader: React.FC = () => {
     form
       .validateFields()
       .then((values) => {
-        var a = { ...values, _id: dataUser?.id };
+        var a = { ...values, id: dataUser?.id };
         mutateUpdateUser(a);
         form.resetFields();
         setVisible(false);
@@ -66,6 +66,18 @@ export const AppHeader: React.FC = () => {
     // Xử lý khi người dùng ấn Hủy
     form.resetFields();
     setVisible(false);
+  };
+  const validatePhoneNumber = (_: any, value: any) => {
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!value) {
+      return Promise.reject(new Error("Please input contact!"));
+    }
+    if (!phoneRegex.test(value)) {
+      return Promise.reject(
+        new Error("Please input a valid phone number with exactly 10 digits!")
+      );
+    }
+    return Promise.resolve();
   };
   return (
     <>
@@ -241,26 +253,22 @@ export const AppHeader: React.FC = () => {
         ]}
       >
         <Form form={form}>
-          <Form.Item
-            label="Fullname"
-            name="fullname"
-            rules={[{ required: true, message: "Vui lòng nhập fullname!" }]}
-          >
+          <Form.Item label="Fullname" name="fullname">
+            <Input />
+          </Form.Item>
+
+          <Form.Item label="Password" name="password">
             <Input />
           </Form.Item>
           <Form.Item
-            label="User"
-            name="user"
-            rules={[{ required: true, message: "Vui lòng nhập user!" }]}
+            label="Contact"
+            name="contact"
+            rules={[{ validator: validatePhoneNumber }]}
           >
-            <Input />
+            <Input style={{ height: 30 }} placeholder="Contact" />
           </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Vui lòng nhập password!" }]}
-          >
-            <Input />
+          <Form.Item label="Address" name="address">
+            <Input style={{ height: 30 }} placeholder="Address" />
           </Form.Item>
         </Form>
       </Modal>
