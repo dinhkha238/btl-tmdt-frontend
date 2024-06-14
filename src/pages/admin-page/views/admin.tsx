@@ -33,7 +33,6 @@ export const Admin = () => {
                   <Menu.Item key="statistics">Thống kê</Menu.Item>
                   <Menu.Item key="products">Sản phẩm</Menu.Item>
                   <Menu.Item key="users">Người dùng</Menu.Item>
-                  <Menu.Item key="carts">Giỏ hàng</Menu.Item>
                   <Menu.Item key="orders">Đơn hàng</Menu.Item>
                   <Menu.Item onClick={handleLogout}>Đăng xuất</Menu.Item>
                 </Menu>

@@ -222,18 +222,15 @@ export const Statistic = () => {
         </Col>
       </Row>
       <ComposedChart
-        width={1200}
-        height={700}
-        data={
-          //     dataStatistic?.map((item: any) => {
-          //   return {
-          //     name: item.nameProductItem,
-          //     uv: item.totalQuantity,
-          //     pv: parseFloat(item.totalRevenue.toFixed(2)),
-          //   };
-          // })
-          data
-        }
+        width={1000}
+        height={500}
+        data={dataStatistic?.map((item: any) => {
+          return {
+            name: item.nameProductItem,
+            uv: item.totalQuantity,
+            pv: parseFloat(item.totalRevenue.toFixed(2)),
+          };
+        })}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
@@ -268,8 +265,8 @@ export const Statistic = () => {
         </Col>
       </Row>
       <BarChart
-        width={1200}
-        height={700}
+        width={1000}
+        height={500}
         data={dataMonthRevenue?.map((item: any, index: any) => {
           return {
             name: `Tháng ${index + 1}`,
