@@ -8,7 +8,38 @@ export const Login = () => {
   const onFinish = (values: any) => {
     mutate(values);
   };
-
+  const validatePassword = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error("Please input password!"));
+    }
+    if (value.length < 8) {
+      return Promise.reject(
+        new Error("Password must be at least 8 characters long!")
+      );
+    }
+    if (!/[A-Z]/.test(value)) {
+      return Promise.reject(
+        new Error("Password must contain at least one uppercase letter!")
+      );
+    }
+    if (!/[a-z]/.test(value)) {
+      return Promise.reject(
+        new Error("Password must contain at least one lowercase letter!")
+      );
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+      return Promise.reject(
+        new Error("Password must contain at least one special character!")
+      );
+    }
+    return Promise.resolve();
+  };
+  const validateGmail = (_: any, value: any) => {
+    if (value && value.endsWith("@gmail.com")) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error("Please input gmail!"));
+  };
   return (
     <div className="col-bgr">
       <Form
@@ -23,16 +54,10 @@ export const Login = () => {
             Log In
           </div>
         </Row>
-        <Form.Item
-          name="username"
-          rules={[{ required: true, message: "Please input username !" }]}
-        >
+        <Form.Item name="username" rules={[{ validator: validateGmail }]}>
           <Input style={{ height: 40 }} placeholder="Username" />
         </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input password !" }]}
-        >
+        <Form.Item name="password" rules={[{ validator: validatePassword }]}>
           <Input.Password style={{ height: 40 }} placeholder="Password" />
         </Form.Item>
         <Row style={{ marginBottom: 30 }}>

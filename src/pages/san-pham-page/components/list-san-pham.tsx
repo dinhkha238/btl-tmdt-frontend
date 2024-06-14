@@ -8,6 +8,7 @@ import {
   EyeOutlined,
   MenuUnfoldOutlined,
   ShoppingCartOutlined,
+  StopOutlined,
 } from "@ant-design/icons";
 import {
   Row,
@@ -145,11 +146,18 @@ export const ListSanPham = () => {
                             width={200}
                             style={{ height: 200 }}
                           />
-                          {item.inStock > 0 && (
+                          {item.inStock > 0 ? (
                             <Popover content={content} placement="left">
                               <ShoppingCartOutlined
                                 className="icon-add-cart"
                                 onClick={handleAddToCart}
+                              />
+                            </Popover>
+                          ) : (
+                            <Popover content={"Sold out"} placement="left">
+                              <StopOutlined
+                                className="icon-add-cart"
+                                style={{ color: "red" }}
                               />
                             </Popover>
                           )}
@@ -216,6 +224,21 @@ export const ListSanPham = () => {
                 <Col>Mô tả: {dataProduct?.spec}</Col>
               </Row>
               <Row>
+                <Col>Thương hiệu: {dataProduct?.brand}</Col>
+              </Row>
+              <Row>
+                <Col>Ngày phát hành: {dataProduct?.releaseDate}</Col>
+              </Row>
+              <Row>
+                <Col>Nhà cung cấp: {dataProduct?.provider}</Col>
+              </Row>
+              <Row>
+                <Col>Phiên bản: {dataProduct?.version}</Col>
+              </Row>
+              <Row>
+                <Col>Series: {dataProduct?.series}</Col>
+              </Row>
+              <Row>
                 <Col>Tồn kho: {dataProduct?.inStock}</Col>
               </Row>
               <Row justify={"center"}>
@@ -223,7 +246,7 @@ export const ListSanPham = () => {
                   <Button
                     onClick={() => addToCart(idProduct)}
                     style={{
-                      marginTop: 160,
+                      marginTop: 100,
                       width: 320,
                       fontSize: 20,
                       height: 50,

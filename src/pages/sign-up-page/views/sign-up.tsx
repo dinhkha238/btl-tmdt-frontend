@@ -1,12 +1,23 @@
 import { useMutationRegister } from "@/pages/app.loader";
-import { Row, Form, Input, Button } from "antd";
+import {
+  Row,
+  Form,
+  Input,
+  Button,
+  Select,
+  DatePicker,
+  DatePickerProps,
+  Col,
+} from "antd";
 import { useNavigate } from "react-router-dom";
 
 export const SignUp: React.FC = () => {
   const [form] = Form.useForm();
+
   const navigate = useNavigate();
   const { mutate } = useMutationRegister();
   const onFinish = (values: any) => {
+    values.birth = values.birth.format("YYYY-MM-DD");
     mutate(values);
   };
   const validatePassword = (_: any, value: any) => {
@@ -47,6 +58,15 @@ export const SignUp: React.FC = () => {
     }
     return Promise.resolve();
   };
+  const onChange: DatePickerProps["onChange"] = (date, dateString) => {
+    console.log(date, dateString);
+  };
+  const validateGmail = (_: any, value: any) => {
+    if (value && value.endsWith("@gmail.com")) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error("Please input gmail!"));
+  };
   return (
     <div className="col-bgr">
       <Form
@@ -57,7 +77,7 @@ export const SignUp: React.FC = () => {
         className="form-complain-login"
       >
         <Row justify={"center"}>
-          <div className="font-middle " style={{ paddingBottom: 30 }}>
+          <div className="font-middle " style={{ paddingBottom: 20 }}>
             Sign Up
           </div>
         </Row>
@@ -65,30 +85,51 @@ export const SignUp: React.FC = () => {
           name="fullname"
           rules={[{ required: true, message: "Please input fullname !" }]}
         >
-          <Input style={{ height: 40 }} placeholder="Fullname" />
+          <Input style={{ height: 30 }} placeholder="Fullname" />
         </Form.Item>
-        <Form.Item
-          name="username"
-          rules={[{ required: true, message: "Please input username !" }]}
-        >
-          <Input style={{ height: 40 }} placeholder="Username" />
+        <Form.Item name="username" rules={[{ validator: validateGmail }]}>
+          <Input style={{ height: 30 }} placeholder="Username" />
         </Form.Item>
         <Form.Item name="password" rules={[{ validator: validatePassword }]}>
-          <Input.Password style={{ height: 40 }} placeholder="Password" />
+          <Input.Password style={{ height: 30 }} placeholder="Password" />
         </Form.Item>
         <Form.Item name="contact" rules={[{ validator: validatePhoneNumber }]}>
-          <Input style={{ height: 40 }} placeholder="Contact" />
+          <Input style={{ height: 30 }} placeholder="Contact" />
         </Form.Item>
         <Form.Item
           name="address"
           rules={[{ required: true, message: "Please input address !" }]}
         >
-          <Input style={{ height: 40 }} placeholder="Address" />
+          <Input style={{ height: 30 }} placeholder="Address" />
         </Form.Item>
-        <Row justify={"end"} style={{ marginBottom: 30 }}>
+        <Row justify={"space-between"}>
+          <Col span={11}>
+            <Form.Item
+              name="gender"
+              rules={[{ required: true, message: "Please input gender !" }]}
+            >
+              <Select
+                options={[
+                  { value: "0", label: "Nam" },
+                  { value: "1", label: "Nữ" },
+                ]}
+                placeholder={"Select gender"}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={11}>
+            <Form.Item
+              name="birth"
+              rules={[{ required: true, message: "Please input birthday !" }]}
+            >
+              <DatePicker onChange={onChange} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row justify={"end"} style={{ marginBottom: 10 }}>
           <Row
             style={{
-              padding: 5,
+              padding: "0px 5px",
               color: "#ffb800",
               fontSize: 18,
               cursor: "pointer",
