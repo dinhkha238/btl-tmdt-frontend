@@ -4,7 +4,11 @@ import {
   useDeleteUser,
   useUpdateUser,
 } from "@/pages/app.loader";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import {
   Alert,
   Button,
@@ -13,12 +17,20 @@ import {
   DatePickerProps,
   Form,
   Input,
+  InputRef,
   Modal,
   Row,
   Select,
   Table,
 } from "antd";
-import { useState } from "react";
+import { ColumnType } from "antd/es/table";
+import { useRef, useState } from "react";
+
+interface DataType {
+  fullname: string;
+  username: string;
+  password: string;
+}
 
 export const User = () => {
   const { data: dataCustomers } = useCustomers();
@@ -43,6 +55,84 @@ export const User = () => {
   const handleCancelDelete = () => {
     setIsModalOpen(false);
   };
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef<InputRef>(null);
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: () => void,
+    dataIndex: string
+  ) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+    setSearchText("");
+  };
+  const getColumnSearchProps = (
+    dataIndex: keyof DataType
+  ): ColumnType<DataType> => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            handleSearch(selectedKeys as string[], confirm, dataIndex as string)
+          }
+          style={{ marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() =>
+            handleSearch(selectedKeys as string[], confirm, dataIndex as string)
+          }
+          icon={<SearchOutlined />}
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button
+          onClick={() => handleReset(clearFilters as () => void)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes((value as string).toLowerCase())
+        : false,
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? <span>{text.toString()}</span> : text,
+  });
   const columns = [
     {
       title: "Fullname",
@@ -53,6 +143,7 @@ export const User = () => {
       title: "Username",
       dataIndex: "username",
       width: 300,
+      ...getColumnSearchProps("username"),
     },
     {
       title: "Password",
