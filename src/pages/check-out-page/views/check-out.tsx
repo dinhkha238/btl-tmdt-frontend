@@ -5,7 +5,7 @@ import {
   useCreateOrder,
   useDeleteAllToCart,
 } from "@/pages/app.loader";
-import { Button, Col, Input, Row, Image, Select } from "antd";
+import { Button, Col, Input, Row, Image, Select, message } from "antd";
 import "../components/check-out.css";
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
@@ -44,7 +44,7 @@ export const CheckOut = () => {
     name: "",
     value: 0,
   });
-  const [typePayment, setTypePayment] = useState();
+  const [typePayment, setTypePayment] = useState("");
   const dataMyCart = JSON.parse(localStorage.getItem("dataMyCart") || "{}");
   const totalMyCart = dataMyCart
     ?.map((item: any) => item.price * item.quantity)
@@ -296,16 +296,28 @@ export const CheckOut = () => {
     return `${year}-${month}-${day}`;
   }
   function info() {
-    const order = {
-      paymentId: typePayment,
-      shipmentId: feeShip?.id,
-      voucherId: voucher?.id,
-      createdAt: formatDate(new Date()),
-      shipAdress: inputAddress,
-      phone: inputPhone,
-    };
-    createOrder(order);
-    deleteAllCart();
-    navigate("/sanpham");
+    if (inputAddress === "") {
+      message.error("Please enter your address");
+    } else if (inputPhone === "") {
+      message.error("Please enter your phone number");
+    } else if (feeShip.id === "") {
+      message.error("Please select a shipping unit");
+    } else if (voucher.id === "") {
+      message.error("Please select a voucher");
+    } else if (typePayment === "") {
+      message.error("Please select a payment type");
+    } else {
+      const order = {
+        paymentId: typePayment,
+        shipmentId: feeShip?.id,
+        voucherId: voucher?.id,
+        createdAt: formatDate(new Date()),
+        shipAdress: inputAddress,
+        phone: inputPhone,
+      };
+      createOrder(order);
+      deleteAllCart();
+      navigate("/sanpham");
+    }
   }
 };

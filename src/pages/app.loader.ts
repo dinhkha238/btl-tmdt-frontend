@@ -302,6 +302,7 @@ export const useReviewedOrder = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(CACHE_KEYS.InforMyOrders);
+        queryClient.invalidateQueries(CACHE_KEYS.InforOrder);
         message.success("Reviewed order success");
       },
       onError: () => {
