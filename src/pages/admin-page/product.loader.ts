@@ -5,6 +5,7 @@ import {
   getProductById,
   getProductItems,
   getStatisticProductItems,
+  getUserSpendInfo,
 } from "@/services/product.service";
 import { message } from "antd";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -13,6 +14,7 @@ const CACHE_KEYS = {
   InforProductItems: "INFOR_PRODUCT_ITEMS",
   InforProductItem: "INFOR_PRODUCT_ITEM",
   InforFeedbackByIdProduct: "INFOR_FEEDBACK_BY_ID_PRODUCT",
+  InforSpendInfo: "INFOR_SPEND_INFO",
 };
 // query
 export const useProductItems = (select: any) => {
@@ -38,6 +40,11 @@ export const useStatisticProductItems = (data: any) => {
 export const useMonthRevenue = (data: any) => {
   return useQuery([CACHE_KEYS.InforProductItems, data], () =>
     getMonthRevenue(data)
+  );
+};
+export const useUserSpendInfo = (data: any) => {
+  return useQuery([CACHE_KEYS.InforSpendInfo, data], () =>
+    getUserSpendInfo(data)
   );
 };
 

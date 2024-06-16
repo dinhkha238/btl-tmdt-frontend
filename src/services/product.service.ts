@@ -35,3 +35,9 @@ export const getMonthRevenue = async (data: any) => {
   });
   return result.data;
 };
+export const getUserSpendInfo = async (data: any) => {
+  const result = await apiClient.get(`/user-spending-info`, {
+    params: filterEmptyString(data),
+  });
+  return result.data;
+};
